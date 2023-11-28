@@ -11,15 +11,23 @@ export class WorkersService {
   ) {}
 
   async findAll(): Promise<Worker[]> {
-    return this.workerModel.find().exec();
+    return this.workerModel.find().populate('role').populate('boss').exec();
   }
 
   async findById(id: string): Promise<Worker | null> {
-    return this.workerModel.findById(id).exec();
+    return this.workerModel
+      .findById(id)
+      .populate('role')
+      .populate('boss')
+      .exec();
   }
 
-  async create(createUserDto: CreateWorkerDto): Promise<Worker> {
-    const createdUser = new this.workerModel(createUserDto);
-    return createdUser.save();
+  async create(createWorkerDto: CreateWorkerDto): Promise<Worker> {
+    const { boss, ...workerData } = createWorkerDto;
+    const createdWorker = new this.workerModel({
+      ...workerData,
+      boss: boss || null,
+    });
+    return createdWorker.save();
   }
 }

@@ -7,5 +7,6 @@ import { RoleSchema } from './models/schema/role.schema';
 @Module({
   imports: [MongooseModule.forFeature([{ name: 'Role', schema: RoleSchema }])],
   providers: [RolesResolver, RolesService],
+  exports: [RolesService],
 })
 export class RolesModule {}

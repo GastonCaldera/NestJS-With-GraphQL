@@ -6,6 +6,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { WorkersModule } from './workers/workers.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RolesModule } from './roles/roles.module';
+import { LogsModule } from './logs/logs.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RolesModule } from './roles/roles.module';
     MongooseModule.forRoot(process.env.MONGODB_DATABASE_HOST),
     WorkersModule,
     RolesModule,
+    LogsModule,
   ],
 })
 export class AppModule {}

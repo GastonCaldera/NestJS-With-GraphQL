@@ -1,4 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Role } from 'src/roles/models/roles.models';
+
 @ObjectType()
 export class Worker {
   @Field(() => ID)
@@ -9,4 +11,16 @@ export class Worker {
 
   @Field({ nullable: true })
   lastName?: string;
+
+  @Field({ nullable: true })
+  email?: string;
+
+  @Field(() => Role, { nullable: true })
+  role?: Role;
+
+  @Field({ nullable: true })
+  version?: number;
+
+  @Field(() => Worker, { nullable: true })
+  boss?: Worker | null;
 }

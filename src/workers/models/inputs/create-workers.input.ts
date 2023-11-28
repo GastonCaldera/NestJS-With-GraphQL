@@ -7,4 +7,16 @@ export class CreateWorkerInput {
 
   @Field()
   lastName: string;
+
+  @Field()
+  role: string;
+
+  @Field({ nullable: true })
+  boss: string;
+
+  @Field()
+  email: string;
+
+  @Field()
+  version: number;
 }
