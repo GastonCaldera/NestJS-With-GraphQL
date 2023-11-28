@@ -22,10 +22,15 @@ export class LogsService {
       .populate('new_role')
       .populate({
         path: 'new_boss',
-        populate: {
-          path: 'boss',
-          populate: 'role',
-        },
+        populate: [
+          {
+            path: 'boss',
+            populate: 'role',
+          },
+          {
+            path: 'role',
+          },
+        ],
       })
       .exec();
   }
