@@ -17,14 +17,24 @@ export class WorkersService {
   ) {}
 
   async findAll(): Promise<Worker[]> {
-    return this.workerModel.find().populate('role').populate('boss').exec();
+    return this.workerModel
+      .find()
+      .populate('role')
+      .populate({
+        path: 'boss',
+        populate: 'role',
+      })
+      .exec();
   }
 
   async findById(id: string): Promise<Worker | null> {
     return this.workerModel
       .findById(id)
       .populate('role')
-      .populate('boss')
+      .populate({
+        path: 'boss',
+        populate: 'role',
+      })
       .exec();
   }
 
@@ -83,12 +93,12 @@ export class WorkersService {
       } else if (bossId === id) {
         throw new NotFoundException('BossId cannot be equal to id.');
       }
-      const boss = await this.workerModel.findById(id);
+      const boss = await this.workerModel.findById(bossId);
       if (!boss) {
         throw new NotFoundException(`Boss with id ${id} not found.`);
       }
       const bossRole = await this.roleModel.findById(boss.role);
-      if (['manager', 'supervisor'].includes(bossRole.name)) {
+      if (!['manager', 'supervisor'].includes(bossRole.name)) {
         throw new NotFoundException(
           'The Boss has to be a manager or a supervisor.',
         );
@@ -101,6 +111,7 @@ export class WorkersService {
       log.new_boss = null;
       log.new_role = roleId;
     }
+    console.log(log);
     worker.role = roleId;
     worker.version += 1;
     const createdLog = new this.logModel(log);

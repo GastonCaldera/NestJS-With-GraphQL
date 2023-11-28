@@ -14,7 +14,7 @@ export const WorkerSchema = new Schema<Worker>({
   firstName: String,
   lastName: String,
   email: String,
-  role: { type: Schema.Types.ObjectId, ref: 'Role' },
+  role: { type: Schema.Types.ObjectId, ref: 'Role', default: null },
   version: Number,
   boss: {
     type: Schema.Types.ObjectId,

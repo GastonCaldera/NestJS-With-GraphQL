@@ -9,7 +9,25 @@ export class LogsService {
   constructor(@InjectModel('Log') private readonly logModel: Model<Log>) {}
 
   async findAll(): Promise<Log[]> {
-    return this.logModel.find().exec();
+    return this.logModel
+      .find()
+      .populate('old_role')
+      .populate({
+        path: 'old_boss',
+        populate: {
+          path: 'boss',
+          populate: 'role',
+        },
+      })
+      .populate('new_role')
+      .populate({
+        path: 'new_boss',
+        populate: {
+          path: 'boss',
+          populate: 'role',
+        },
+      })
+      .exec();
   }
 
   async findById(id: string): Promise<Log | null> {
