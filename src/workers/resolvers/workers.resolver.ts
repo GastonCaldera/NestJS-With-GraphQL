@@ -1,0 +1,29 @@
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { WorkersService } from '../services/workers.service';
+import { Worker } from '../models/workers.models';
+import { CreateWorkerInput } from '../models/inputs/create-workers.input';
+import { NotFoundException } from '@nestjs/common';
+
+@Resolver()
+export class WorkersResolver {
+  constructor(private readonly workersService: WorkersService) {}
+
+  @Query(() => [Worker])
+  async workers() {
+    return this.workersService.findAll();
+  }
+
+  @Query(() => Worker)
+  async worker(@Args('id') id: string) {
+    const worker = await this.workersService.findById(id);
+    if (!worker) {
+      throw new NotFoundException(`Worker with id ${id} not found`);
+    }
+    return worker;
+  }
+
+  @Mutation(() => Worker)
+  async createWorker(@Args('input') input: CreateWorkerInput) {
+    return this.workersService.create(input);
+  }
+}

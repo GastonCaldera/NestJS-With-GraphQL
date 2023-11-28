@@ -1,0 +1,30 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Worker {
+  id: ID!
+  firstName: String
+  lastName: String
+}
+
+type Role {
+  id: ID!
+  name: String
+  created_at: String
+}
+
+type Query {
+  workers: [Worker!]!
+  worker(id: String!): Worker!
+  roles: [Role!]!
+}
+
+type Mutation {
+  createWorker(input: CreateWorkerInput!): Worker!
+}
+
+input CreateWorkerInput {
+  firstName: String!
+  lastName: String!
+}
