@@ -19,6 +19,6 @@ export const WorkerSchema = new Schema<Worker>({
   boss: {
     type: Schema.Types.ObjectId,
     ref: 'Worker',
-    default: '',
+    default: null,
   },
 });

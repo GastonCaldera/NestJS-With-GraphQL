@@ -16,11 +16,11 @@ export class Worker {
   email?: string;
 
   @Field(() => Role, { nullable: true })
-  role?: Role;
+  role?: Role | string;
 
   @Field({ nullable: true })
   version?: number;
 
   @Field(() => Worker, { nullable: true })
-  boss?: Worker | null;
+  boss?: Worker | null | string;
 }

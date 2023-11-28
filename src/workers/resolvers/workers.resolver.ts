@@ -2,15 +2,11 @@ import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
 import { WorkersService } from '../services/workers.service';
 import { Worker } from '../models/workers.models';
 import { CreateWorkerInput } from '../models/inputs/create-workers.input';
-import { NotFoundException } from '@nestjs/common';
-import { RolesService } from 'src/roles/services/roles.service';
+import { EditWorkerRoleInput } from '../models/inputs/edit-worker-role.input';
 
 @Resolver()
 export class WorkersResolver {
-  constructor(
-    private readonly workersService: WorkersService,
-    private readonly roleService: RolesService,
-  ) {}
+  constructor(private readonly workersService: WorkersService) {}
 
   @Query(() => [Worker])
   async workers() {
@@ -19,20 +15,16 @@ export class WorkersResolver {
 
   @Query(() => Worker)
   async worker(@Args('id') id: string) {
-    const worker = await this.workersService.findById(id);
-    if (!worker) {
-      throw new NotFoundException(`Worker with id ${id} not found`);
-    }
-
-    return worker;
+    return this.workersService.findById(id);
   }
 
   @Mutation(() => Worker)
   async createWorker(@Args('input') input: CreateWorkerInput) {
-    const role = await this.roleService.findById(input.role);
-    if (!role) {
-      throw new NotFoundException(`Role with id ${input.role} not found`);
-    }
     return this.workersService.create(input);
+  }
+
+  @Mutation(() => Worker)
+  async editWorkerRole(@Args('input') input: EditWorkerRoleInput) {
+    return this.workersService.editRole(input);
   }
 }

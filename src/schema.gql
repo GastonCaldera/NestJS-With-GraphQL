@@ -18,15 +18,27 @@ type Worker {
   boss: Worker
 }
 
+type Log {
+  id: ID!
+  name: String
+  old_role: Role!
+  new_role: Role!
+  old_boss: Worker!
+  new_boss: Worker!
+  created_at: String
+}
+
 type Query {
   workers: [Worker!]!
   worker(id: String!): Worker!
   roles: [Role!]!
-  role(id: String!): Role!
+  role(id: String!): Log!
+  logs: [Log!]!
 }
 
 type Mutation {
   createWorker(input: CreateWorkerInput!): Worker!
+  editWorkerRole(input: EditWorkerRoleInput!): Worker!
 }
 
 input CreateWorkerInput {
@@ -36,4 +48,10 @@ input CreateWorkerInput {
   boss: String
   email: String!
   version: Float!
+}
+
+input EditWorkerRoleInput {
+  id: String!
+  roleId: String!
+  bossId: String
 }
