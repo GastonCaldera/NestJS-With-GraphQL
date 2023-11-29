@@ -39,6 +39,8 @@ export class WorkersService {
   }
 
   async create(createWorkerDto: CreateWorkerDto): Promise<Worker> {
+    const { boss: bossId, ...workerData } = createWorkerDto;
+    const payload = { ...workerData, boss: null };
     if (!isValidObjectId(createWorkerDto.role)) {
       throw new NotFoundException('Role ID is no a valid Object ID.');
     }
@@ -48,11 +50,28 @@ export class WorkersService {
         `Role with id ${createWorkerDto.role} not found.`,
       );
     }
-    const { boss, ...workerData } = createWorkerDto;
-    const createdWorker = new this.workerModel({
-      ...workerData,
-      boss: boss || null,
-    });
+
+    if (role.name !== 'manager') {
+      if (!bossId) {
+        throw new NotFoundException(
+          'BossId is required when the role is not manager.',
+        );
+      } else if (!isValidObjectId(bossId)) {
+        throw new NotFoundException('BossId ID is no a valid Object ID.');
+      }
+      const boss = await this.workerModel.findById(bossId);
+      if (!boss) {
+        throw new NotFoundException(`Boss with id ${bossId} not found.`);
+      }
+      const bossRole = await this.roleModel.findById(boss.role);
+      if (!['manager', 'supervisor'].includes(bossRole.name)) {
+        throw new NotFoundException(
+          'The Boss has to be a manager or a supervisor.',
+        );
+      }
+      payload.boss = bossId;
+    }
+    const createdWorker = new this.workerModel(payload);
     return createdWorker.save();
   }
   async editRole({ id, roleId, bossId }: EditWorkerRoleDto): Promise<Worker> {
@@ -96,7 +115,7 @@ export class WorkersService {
       }
       const boss = await this.workerModel.findById(bossId);
       if (!boss) {
-        throw new NotFoundException(`Boss with id ${id} not found.`);
+        throw new NotFoundException(`Boss with id ${bossId} not found.`);
       }
       const bossRole = await this.roleModel.findById(boss.role);
       if (!['manager', 'supervisor'].includes(bossRole.name)) {
@@ -112,7 +131,6 @@ export class WorkersService {
       log.new_boss = null;
       log.new_role = roleId;
     }
-    console.log(log);
     worker.role = roleId;
     worker.version += 1;
     const createdLog = new this.logModel(log);
