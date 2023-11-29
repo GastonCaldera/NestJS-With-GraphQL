@@ -1,32 +1,9 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a project created with NestJS and GraphQL, allowing you to manage your employees and keep a record every time one of your employees gets a new role or a new boss. In this project, you'll use GraphQL to create and edit employee profiles.
 
 ## Installation
+To install the project, simply execute the following command. IMPORTANT: You must create a .env file; you can use .env.example as a guide.
 
 ```bash
 $ yarn install
@@ -45,28 +22,98 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-## Test
+## Usage
+
+In this project, you will find 3 main queries and 2 mutations. Let's start by explaining the queries and then proceed to the mutations. For more information, you can visit your_path:3000/graphQL to see each query and mutation in greater detail.
+
+## Queries
+Here are some examples of what you can do with the queries. There are 6 queries: workers, worker, logs, log, roles, roles. Log, worker, and role receive a parameter called id.
 
 ```bash
-# unit tests
-$ yarn run test
+query {
+  workers {
+    id
+    firstName
+    lastName
+    version
+    role {
+      id
+      name
+    }
+    boss {
+      id
+      firstName
+      lastName
+      role {
+        id
+        name
+      }
+    }
+  }
+}
 
-# e2e tests
-$ yarn run test:e2e
+query {
+  roles {
+    id
+    name
+    created_at
+  }
+}
 
-# test coverage
-$ yarn run test:cov
+query {
+  logs {
+    name
+    new_role {
+      id
+      name
+    }
+    user {
+      firstName
+      lastName
+    }
+    new_boss {
+      firstName
+      lastName
+      version
+    }
+  }
+}
 ```
 
-## Support
+## Mutations
+In the mutations, we have only two: createWorker and editWorkerRole. CreateWorker has two important parameters, ROLE, and BOSS. The role is mandatory, but the boss is not. If the boss is not specified, the role of that person must be a manager. Managers are the only workers who do not have a direct boss. There are 4 roles: intern, employee, supervisor, and manager. Only supervisors and managers can be bosses.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+mutation {
+	createWorker(input: {
+    firstName: "",
+    lastName: "", 
+    role: ""
+    email: "",
+    version: 0,
+    boss: ""
+  }){
+    id
+    firstName
+    lastName
+  }
+}
+```
 
-## Stay in touch
+The editWorkerRole mutation is used to edit the role of a person or edit the boss. The same rule applies as in createWorker: the bossId parameter is not mandatory if the role sent is manager. Every time a change in the user's role or a change of boss occurs, a log with that change information will be created, and the user's version will be updated from 0 to 1 and so on.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+mutation {
+  editWorkerRole(input: {
+    id: "", 
+    roleId: "", 
+    bossId: ""
+  }){
+    id
+    firstName
+  }
+}
+```
 
 ## License
 
