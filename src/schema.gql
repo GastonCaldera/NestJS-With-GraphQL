@@ -21,6 +21,7 @@ type Worker {
 type Log {
   id: ID!
   name: String
+  user: Worker!
   old_role: Role!
   new_role: Role!
   old_boss: Worker!
@@ -32,8 +33,9 @@ type Query {
   workers: [Worker!]!
   worker(id: String!): Worker!
   roles: [Role!]!
-  role(id: String!): Log!
+  role(id: String!): Role!
   logs: [Log!]!
+  log(id: String!): Log!
 }
 
 type Mutation {

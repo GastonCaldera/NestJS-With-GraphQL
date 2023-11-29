@@ -70,6 +70,7 @@ export class WorkersService {
     const worker = await this.workerModel.findById(id);
     const log = {
       name: 'Change Role',
+      user: id,
       old_role: worker.role,
       old_boss: worker.boss,
       new_boss: '',

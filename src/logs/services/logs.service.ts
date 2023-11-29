@@ -11,13 +11,30 @@ export class LogsService {
   async findAll(): Promise<Log[]> {
     return this.logModel
       .find()
+      .populate({
+        path: 'user',
+        populate: [
+          {
+            path: 'boss',
+            populate: 'role',
+          },
+          {
+            path: 'role',
+          },
+        ],
+      })
       .populate('old_role')
       .populate({
         path: 'old_boss',
-        populate: {
-          path: 'boss',
-          populate: 'role',
-        },
+        populate: [
+          {
+            path: 'boss',
+            populate: 'role',
+          },
+          {
+            path: 'role',
+          },
+        ],
       })
       .populate('new_role')
       .populate({

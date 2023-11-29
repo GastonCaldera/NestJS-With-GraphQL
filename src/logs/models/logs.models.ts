@@ -10,17 +10,20 @@ export class Log {
   @Field({ nullable: true })
   name?: string;
 
-  @Field(() => Role)
-  old_role?: string;
+  @Field(() => Worker)
+  user?: Worker;
 
   @Field(() => Role)
-  new_role?: string;
+  old_role?: Role;
+
+  @Field(() => Role)
+  new_role?: Role;
 
   @Field(() => Worker)
-  old_boss?: string;
+  old_boss?: Worker;
 
   @Field(() => Worker)
-  new_boss?: string | null;
+  new_boss?: Worker | null;
 
   @Field({ nullable: true })
   created_at?: string;

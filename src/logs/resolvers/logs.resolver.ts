@@ -12,7 +12,7 @@ export class LogsResolver {
   }
 
   @Query(() => Log)
-  async role(@Args('id') id: string) {
+  async log(@Args('id') id: string) {
     return this.logsService.findById(id);
   }
 }
