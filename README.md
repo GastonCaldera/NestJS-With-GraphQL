@@ -115,6 +115,13 @@ mutation {
 }
 ```
 
+## Test
+
+```bash
+# unit tests
+$ yarn run test
+```
+
 ## License
 
 Nest is [MIT licensed](LICENSE).

@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
-import { Role } from 'src/roles/models/roles.models';
-import { Worker } from 'src/workers/models/workers.models';
+import { Role } from '../../roles/models/roles.models';
+import { Worker } from '../../workers/models/workers.models';
 
 @ObjectType()
 export class Log {

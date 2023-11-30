@@ -28,6 +28,10 @@ export class WorkersService {
   }
 
   async findById(id: string): Promise<Worker | null> {
+    const worker = await this.workerModel.findById(id);
+    if (!worker) {
+      throw new NotFoundException(`Worker with id ${id} not found.`);
+    }
     return this.workerModel
       .findById(id)
       .populate('role')
