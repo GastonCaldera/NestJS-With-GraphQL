@@ -27,7 +27,7 @@ $ yarn run start:prod
 In this project, you will find 3 main queries and 2 mutations. Let's start by explaining the queries and then proceed to the mutations. For more information, you can visit your_path:3000/graphQL to see each query and mutation in greater detail.
 
 ## Queries
-Here are some examples of what you can do with the queries. There are 6 queries: workers, worker, logs, log, roles, roles. Log, worker, and role receive a parameter called id.
+Here are some examples of what you can do with the queries. There are 6 queries: workers, worker, logs, log, roles, role. Log, worker, and role receive a parameter called id.
 
 ```bash
 query {
